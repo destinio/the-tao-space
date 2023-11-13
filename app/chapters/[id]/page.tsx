@@ -28,16 +28,16 @@ export default async function ChapterPage({
 
   return (
     <>
-      <header className='flex gap-2 py-4'>
+      <header className='flex gap-4 py-4 items-end'>
         <h3 className=' text-xl'>{chapter.number}</h3>
         <h2 className='text-2xl font-bold'>{chapter.title}</h2>
       </header>
       <div>
         {chapter.sections.map(s => {
           return (
-            <p key={s.id} className='mb-4 text-lg'>
+            <p key={s.id} className='mb-8 text-lg'>
               {s.lines.map(l => {
-                return <span className='block'>{l.text}</span>
+                return <span className='block mb-2'>{l.text}</span>
               })}
             </p>
           )
