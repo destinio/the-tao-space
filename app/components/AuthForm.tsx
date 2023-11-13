@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 interface AuthFormProps {
   handler: (e: string, p: string) => void
@@ -13,10 +13,12 @@ export default function AuthForm({
 }: AuthFormProps) {
   const emailRef = useRef<HTMLInputElement>(null!)
   const passRef = useRef<HTMLInputElement>(null!)
+  const [loading, setLoading] = useState(false)
 
   function handleClick() {
     handler(emailRef.current.value, passRef.current.value)
 
+    setLoading(true)
     emailRef.current.value = ''
     passRef.current.value = ''
   }
@@ -41,8 +43,9 @@ export default function AuthForm({
         <button
           className='border-white border-2 rounded p-2'
           onClick={handleClick}
+          disabled={loading}
         >
-          {buttonText}
+          {!loading ? buttonText : '...'}
         </button>
         {buttonText === 'login' ? (
           <Link href={'/signup'} className='border-white border-2 rounded p-2'>

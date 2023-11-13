@@ -19,7 +19,7 @@ export default function LoginPage() {
     }
 
     if (!error) {
-      router.push('/chapters')
+      router.refresh()
     }
   }
   return (
