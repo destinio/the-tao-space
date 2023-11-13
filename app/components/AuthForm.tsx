@@ -41,7 +41,7 @@ export default function AuthForm({
       </div>
       <div className='flex gap-2'>
         <button
-          className='border-white border-2 rounded p-2'
+          className='border-white border-2 rounded p-2 disabled:opacity-5'
           onClick={handleClick}
           disabled={loading}
         >

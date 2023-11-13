@@ -15,5 +15,5 @@ export default async function AuthLayout({
     redirect('/')
   }
 
-  return <div className=''>{children}</div>
+  return <div className='m-auto max-w-2xl p-4'>{children}</div>
 }

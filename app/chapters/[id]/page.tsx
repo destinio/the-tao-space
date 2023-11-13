@@ -28,7 +28,6 @@ export default async function ChapterPage({
 }: {
   params: { id: string }
 }) {
-  console.log(id)
   const supabase = createServerComponentClient({ cookies })
   const { data: chapter, error } = await supabase
     .from('chapters')
@@ -49,10 +48,10 @@ export default async function ChapterPage({
   return (
     <>
       <header className='flex flex-col gap-4 border-b-2 py-4 mb-8 border-dotted'>
-        <p className='flex gap-4 items-center'>
+        <div className='flex gap-4 items-center'>
           <h3 className=' text-xl'>{chapter.number}</h3>
           <h2 className='text-2xl font-bold'>{chapter.title}</h2>
-        </p>
+        </div>
         <nav className='flex gap-2'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -89,7 +88,11 @@ export default async function ChapterPage({
           return (
             <p key={s.id} className='mb-8 text-lg'>
               {s.lines.map(l => {
-                return <span className='block mb-2'>{l.text}</span>
+                return (
+                  <span key={l.id} className='block mb-2'>
+                    {l.text}
+                  </span>
+                )
               })}
             </p>
           )
