@@ -28,7 +28,7 @@ export default async function ChapterPage({
 
   return (
     <>
-      <header className='flex gap-4 py-4 items-end'>
+      <header className='flex gap-4 mt-4 mb-8 pb-4 items-end border-b-2 border-dotted'>
         <h3 className=' text-xl'>{chapter.number}</h3>
         <h2 className='text-2xl font-bold'>{chapter.title}</h2>
       </header>
