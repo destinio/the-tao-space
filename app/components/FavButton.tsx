@@ -50,6 +50,7 @@ export default function FavButton({ chapter_id, fav_id }: FavButtonProps) {
     }
 
     setFaved(false)
+    router.refresh()
   }
   return (
     <>
