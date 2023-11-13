@@ -17,7 +17,7 @@ export default async function Home() {
             className='underline underline-offset-4 decoration-dotted'
             href={`/chapters/${c.id}`}
           >
-            {String(c.number).padStart(2, 0)}
+            {String(c.number).padStart(2, '0')}
           </Link>
         )
       })}
