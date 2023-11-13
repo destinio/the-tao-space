@@ -9,16 +9,16 @@ export default async function Home() {
 
   if (error) return <h2>{error.message}</h2>
   return (
-    <div>
+    <div className='flex flex-row flex-wrap gap-6 text-2xl justify-center pt-8'>
       {data.map(c => {
         return (
-          <div key={c.id}>
-            <Link href={`/chapters/${c.id}`}>
-              <h3>
-                {c.number} - {c.title}
-              </h3>
-            </Link>
-          </div>
+          <Link
+            key={c.id}
+            className='underline underline-offset-4 decoration-dotted'
+            href={`/chapters/${c.id}`}
+          >
+            {String(c.number).padStart(2, 0)}
+          </Link>
         )
       })}
     </div>
