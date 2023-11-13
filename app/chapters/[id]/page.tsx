@@ -55,7 +55,12 @@ export default async function ChapterPage({
           <h2 className='text-2xl font-bold'>{chapter.title}</h2>
         </div>
         <nav className='flex gap-2'>
-          <FavButton chapter_id={chapter.id} fav_id={chapter.favorites[0].id} />
+          <FavButton
+            chapter_id={chapter.id}
+            fav_id={
+              chapter.favorites.length === 0 ? null : chapter.favorites[0].id
+            }
+          />
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'

@@ -1,22 +1,53 @@
 'use client'
 
-import { useState } from 'react'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useEffect, useState } from 'react'
 
 interface FavButtonProps {
   chapter_id: string
-  fav_id: string
+  fav_id?: string | null
 }
 
 export default function FavButton({ chapter_id, fav_id }: FavButtonProps) {
-  const [faved, setFaved] = useState(false)
+  const [faved, setFaved] = useState(() => {
+    if (fav_id) {
+      return true
+    }
+
+    return false
+  })
 
   async function handleFav() {
-    alert(JSON.stringify({ fav_id }))
+    const supabase = createClientComponentClient()
+    const { data, error } = await supabase
+      .from('favorites')
+      .insert({ chapter_id })
+
+    if (error) {
+      alert(error)
+      console.log(error)
+      setFaved(false)
+      return
+    }
+
+    alert('faved')
+    console.log(data)
     setFaved(true)
   }
 
   async function handleDeleteFav() {
-    alert(JSON.stringify({ fav_id }))
+    const supabase = createClientComponentClient()
+    const { data, error } = await supabase
+      .from('favorites')
+      .delete()
+      .eq('id', fav_id)
+
+    if (error) {
+      console.log(error)
+      alert('not deleted')
+      return
+    }
+
     setFaved(false)
   }
   return (
