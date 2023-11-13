@@ -30,6 +30,9 @@ export default async function ChapterPage({
   params: { id: string }
 }) {
   const supabase = createServerComponentClient({ cookies })
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
   const { data: chapter, error } = await supabase
     .from('chapters')
     .select(
@@ -55,12 +58,14 @@ export default async function ChapterPage({
           <h2 className='text-2xl font-bold'>{chapter.title}</h2>
         </div>
         <nav className='flex gap-2'>
-          <FavButton
-            chapter_id={chapter.id}
-            fav_id={
-              chapter.favorites.length === 0 ? null : chapter.favorites[0].id
-            }
-          />
+          {session && (
+            <FavButton
+              chapter_id={chapter.id}
+              fav_id={
+                chapter.favorites.length === 0 ? null : chapter.favorites[0].id
+              }
+            />
+          )}
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
