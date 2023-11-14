@@ -17,11 +17,11 @@ export async function generateMetadata(
   const supabase = createServerComponentClient({ cookies })
   const { data } = await supabase
     .from('chapters')
-    .select('title')
+    .select('number')
     .eq('number', id)
     .single()
   return {
-    title: `Tao Te Ching: Chapter ${data?.title}`,
+    title: `Tao Te Ching: Chapter ${data?.number}`,
   }
 }
 
