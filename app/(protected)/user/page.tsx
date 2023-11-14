@@ -6,6 +6,10 @@ import Link from 'next/link'
 export default async function UserPage() {
   const supabase = createServerComponentClient<Database>({ cookies })
 
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
   const { data, error } = await supabase.from('favorites').select(`
     id, ...chapters(title, number) 
   `)
@@ -16,17 +20,22 @@ export default async function UserPage() {
 
   return (
     <>
-      <div className='m-auto max-w-4xl'>
-        <h3>favorites</h3>
-        <div className='flex flex-col'>
-          {data.map(f => {
-            return (
-              <Link href={`/chapters/${String(f.number)}`} key={f.id}>
-                {f.title}
-              </Link>
-            )
-          })}
-        </div>
+      <div>
+        <section className='m-auto max-w-4xl p-8'>
+          <h2>{session?.user.email}</h2>
+        </section>
+        <section className='m-auto max-w-4xl p-8'>
+          <h3 className='text-3xl mb-4'>favorites</h3>
+          <div className='flex flex-col'>
+            {data.map(f => {
+              return (
+                <Link href={`/chapters/${String(f.number)}`} key={f.id}>
+                  {f.title}
+                </Link>
+              )
+            })}
+          </div>
+        </section>
       </div>
     </>
   )
