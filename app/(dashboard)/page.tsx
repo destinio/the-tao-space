@@ -5,7 +5,9 @@ import Link from 'next/link'
 
 export default async function Home() {
   const supabase = createServerComponentClient({ cookies })
-
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
   const { data, error } = await supabase.from('chapters').select(`
     *, favorites(id)
   `)
@@ -23,9 +25,12 @@ export default async function Home() {
       </section>
       <div className='flex justify-between items-center p-4 max-w-2xl m-auto'>
         <h3>Chapters</h3>
-        <div className='flex items-center gap-2'>
-          <span className=' text-yellow-400 text-4xl'>&#x2022;</span> favorites
-        </div>
+        {session && (
+          <div className='flex items-center gap-2'>
+            <span className=' text-yellow-400 text-4xl'>&#x2022;</span>{' '}
+            favorites
+          </div>
+        )}
       </div>
       <div className='flex flex-row flex-wrap gap-6 text-2xl justify-center m-auto max-w-2xl'>
         {data.map(c => {
