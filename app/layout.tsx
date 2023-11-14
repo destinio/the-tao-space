@@ -6,8 +6,9 @@ import NavBar from './components/NavBar'
 const inter = Open_Sans({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Tao Space',
-  description: 'A modern translation of the Tao Te Ching',
+  title: 'My Tao Blog',
+  description:
+    "Embark on a journey of modern understanding and timeless wisdom with our living translation of the Tao Te Ching. Immerse yourself in the profound teachings of Lao Tzu, reimagined for today's world.",
 }
 
 export default function RootLayout({

@@ -14,7 +14,7 @@ export default async function NavBar() {
   return (
     <div className='text-white bg-emerald-600 text-xl'>
       <div className='flex justify-between items-center max-w-4xl p-2 px-8 m-auto'>
-        <h1>Tao Space</h1>
+        <h1>My Tao Blog</h1>
         <nav className='flex gap-2 items-center'>
           <Link href={'/'} title='home'>
             <svg
