@@ -16,7 +16,7 @@ export default async function NavBar() {
       <div className='flex justify-between items-center max-w-4xl p-2 px-8 m-auto'>
         <h1>Tao Space</h1>
         <nav className='flex gap-2 items-center'>
-          <Link href={'/'}>
+          <Link href={'/'} title='home'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -34,7 +34,7 @@ export default async function NavBar() {
             </svg>
           </Link>
           {data.session && (
-            <Link href={'/user'}>
+            <Link href={'/user'} title='user info'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 viewBox='0 0 24 24'

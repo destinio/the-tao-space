@@ -53,9 +53,11 @@ export default async function ChapterPage({
   return (
     <>
       <header className='flex flex-col gap-4 border-b-2 py-4 mb-8 border-dotted'>
-        <div className='flex gap-4 items-center'>
-          <h3 className=' text-xl'>{chapter.number}</h3>
-          <h2 className='text-2xl font-bold'>{chapter.title}</h2>
+        <div className='flex gap-4 items-end'>
+          <h3 className=' text-xl'>
+            {String(chapter.number).padStart(2, '0')}
+          </h3>
+          <h2 className='text-3xl font-bold'>{chapter.title}</h2>
         </div>
         <nav className='flex gap-2'>
           {session && (
@@ -85,10 +87,10 @@ export default async function ChapterPage({
       <div>
         {chapter.sections.map(s => {
           return (
-            <p key={s.id} className='mb-8 text-lg'>
+            <p key={s.id} className=' mb-12 text-2xl'>
               {s.lines.map(l => {
                 return (
-                  <span key={l.id} className='block mb-2'>
+                  <span key={l.id} className='block mb-4'>
                     {l.text}
                   </span>
                 )

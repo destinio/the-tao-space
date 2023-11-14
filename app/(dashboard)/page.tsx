@@ -12,20 +12,29 @@ export default async function Home() {
 
   if (error) return <h2>{error.message}</h2>
   return (
-    <div className='flex flex-row flex-wrap gap-6 text-2xl justify-center pt-8'>
-      {data.map(c => {
-        return (
-          <Link
-            key={c.id}
-            className={`${
-              c.favorites.length > 0 && 'text-yellow-500'
-            } underline underline-offset-4 decoration-dotted`}
-            href={`/chapters/${c.number}`}
-          >
-            {String(c.number).padStart(2, '0')}
-          </Link>
-        )
-      })}
+    <div>
+      <div className='text-center max-w-2xl m-auto'>
+        <legend className='block text-center'>
+          <div className='flex items-center gap-2'>
+            <span className=' text-yellow-400 text-4xl'>&#x2022;</span> favorite
+          </div>
+        </legend>
+      </div>
+      <div className='flex flex-row flex-wrap gap-6 text-2xl justify-center pt-8'>
+        {data.map(c => {
+          return (
+            <Link
+              key={c.id}
+              className={`${
+                c.favorites.length > 0 && 'text-yellow-500'
+              } underline underline-offset-4 decoration-dotted`}
+              href={`/chapters/${c.number}`}
+            >
+              {String(c.number).padStart(2, '0')}
+            </Link>
+          )
+        })}
+      </div>
     </div>
   )
 }
