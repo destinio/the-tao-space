@@ -10,11 +10,28 @@ export default async function UserPage() {
     data: { session },
   } = await supabase.auth.getSession()
 
-  const { data, error } = await supabase.from('favorites').select(`
+  const { data: chapters, error } = await supabase.from('favorites').select(`
     id, ...chapters(title, number) 
   `)
 
-  if (!data) {
+  const { data: tags } = await supabase.from('user_tags').select(`
+    id, ...tags(tag_id, tag_text)
+  `)
+
+  let ordered_tags: any[] = []
+
+  let uniq = new Set()
+
+  tags?.forEach(t => {
+    if (!uniq.has(t.tag_text)) {
+      uniq.add(t.tag_text)
+      ordered_tags.push(t)
+    }
+  })
+
+  console.log(ordered_tags)
+
+  if (!chapters) {
     return <h2>No chapters</h2>
   }
 
@@ -24,10 +41,26 @@ export default async function UserPage() {
         <section className='m-auto max-w-4xl p-8'>
           <h2>{session?.user.email}</h2>
         </section>
+
+        <section className='m-auto max-w-4xl p-8'>
+          <h3 className='text-3xl mb-4 flex-wrap'>Tags</h3>
+          <div className='flex gap-2'>
+            {ordered_tags?.map(t => {
+              return (
+                <Link
+                  href={`/tags/${t.tag_id}`}
+                  className='p-2 bg-orange-600 rounded-md'
+                >
+                  {t.tag_text}
+                </Link>
+              )
+            })}
+          </div>
+        </section>
         <section className='m-auto max-w-4xl p-8'>
           <h3 className='text-3xl mb-4'>favorites</h3>
           <div className='flex flex-col'>
-            {data.map(f => {
+            {chapters.map(f => {
               return (
                 <Link href={`/chapters/${String(f.number)}`} key={f.id}>
                   {f.title}
