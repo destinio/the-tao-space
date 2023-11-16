@@ -29,8 +29,6 @@ export default async function UserPage() {
     }
   })
 
-  console.log(ordered_tags)
-
   if (!chapters) {
     return <h2>No chapters</h2>
   }

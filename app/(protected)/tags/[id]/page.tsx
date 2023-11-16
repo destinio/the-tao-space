@@ -21,7 +21,6 @@ export default async function TagByIDPage({
     console.log(error)
     return <h2>No tag info</h2>
   }
-  console.log(tags)
   return (
     <div className='m-auto max-w-4xl p-8'>
       <h2 className='text-3xl mb-8'>{tags[0].tag_text}</h2>
