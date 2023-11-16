@@ -2,9 +2,8 @@
 
 import FavButton from '@/app/components/FavButton'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { error } from 'console'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface Tag {
   user_tag_id: string
@@ -25,7 +24,10 @@ export default function ChapterHeader({
   session: boolean
   fav_id: string | null
 }) {
+  const [tagging, setTagging] = useState(false)
   const [tags, setTags] = useState<any[]>(null!)
+
+  const newTagInputRef = useRef<HTMLInputElement>(null!)
 
   async function getTags() {
     const supabase = createClientComponentClient()
@@ -49,11 +51,96 @@ export default function ChapterHeader({
     getTags()
   }, [])
 
+  function handleStartTagging() {
+    setTagging(p => {
+      setTimeout(() => {
+        if (newTagInputRef.current) {
+          newTagInputRef.current.focus()
+        }
+      }, 500)
+      return !p
+    })
+  }
+
+  function normalizeTage(tag: string) {
+    return tag.toLowerCase().trim()
+  }
+
+  function isInCurrentTags(tag: string) {
+    const tagNames = tags.map(t => t.tag_text)
+
+    return tagNames.includes(tag)
+  }
+
+  async function handleAddNewTag() {
+    const newTag = newTagInputRef.current.value
+    const moreThanOne = newTag.split(' ')
+    if (newTag.length <= 0 || moreThanOne.length !== 1) {
+      return
+    }
+    const normTag = normalizeTage(newTag)
+
+    if (isInCurrentTags(normTag)) {
+      return
+    }
+
+    const supabase = createClientComponentClient()
+
+    const { data, error } = await supabase.from('tags').select()
+
+    const tagExists = data?.find(t => t.tag_text === normTag)
+
+    if (tagExists) {
+      console.log('tagex', tagExists)
+
+      const { error } = await supabase.from('user_tags').insert({
+        tag_id: tagExists.tag_id,
+        chapter_id: id,
+      })
+
+      if (error) {
+        console.log(error)
+        return
+      }
+
+      setTags(p => [...p, tagExists])
+      return
+    }
+
+    if (!tagExists) {
+      const { data, error } = await supabase
+        .from('tags')
+        .insert({ tag_text: normTag })
+        .select()
+
+      if (data) {
+        const newT = data[0]
+        const { tag_id } = newT
+
+        console.log('new', tag_id)
+
+        const { data: ntt } = await supabase
+          .from('user_tags')
+          .insert({ chapter_id: id, tag_id })
+          .select(`user_tag_id:id, tag_id, ...tags(tag_text)`)
+
+        if (ntt) {
+          setTags(p => [...p, ntt[0]])
+          newTagInputRef.current.value = ''
+
+          return
+        }
+
+        return
+      }
+    }
+  }
+
   return (
     <>
       <header className='flex flex-col gap-8 border-b-2 py-4 mb-8 border-dotted'>
         <div className='flex flex-col justify-center'>
-          <div className='flex items-end gap-2 mb-2'>
+          <div className='flex items-end gap-2 mb-4'>
             <h3 className=' text-xl'>{String(number).padStart(2, '0')}</h3>
             <h2 className='text-3xl font-bold'>{title}</h2>
           </div>
@@ -100,7 +187,12 @@ export default function ChapterHeader({
               viewBox='0 0 24 24'
               strokeWidth={1.5}
               stroke='currentColor'
-              className='w-6 h-6'
+              className={`w-6 h-6 hover:text-yellow-400 ${
+                tagging && 'text-green-400'
+              }`}
+              aria-label='tag chapter'
+              role='button'
+              onClick={handleStartTagging}
             >
               <path
                 strokeLinecap='round'
@@ -147,6 +239,22 @@ export default function ChapterHeader({
             </svg>
           </Link>
         </nav>
+        {tagging && (
+          <div className='px-8 flex justify-center gap-2'>
+            <input
+              type='text'
+              ref={newTagInputRef}
+              className=' bg-transparent border border-green-400 rounded text-white p-2'
+            />
+            <button
+              className=' border border-green-400 p-2 rounded text-2xl px-4'
+              aria-label='submit new todo'
+              onClick={handleAddNewTag}
+            >
+              +
+            </button>
+          </div>
+        )}
       </header>
     </>
   )
