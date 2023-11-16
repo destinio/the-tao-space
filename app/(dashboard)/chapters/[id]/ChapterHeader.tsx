@@ -73,8 +73,8 @@ export default function ChapterHeader({
 
   async function handleAddNewTag() {
     const newTag = newTagInputRef.current.value
-    const moreThanOne = newTag.split(' ')
-    if (newTag.length <= 0 || moreThanOne.length !== 1) {
+
+    if (newTag.length <= 0) {
       return
     }
     const normTag = normalizeTage(newTag)
