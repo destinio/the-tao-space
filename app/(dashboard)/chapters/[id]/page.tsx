@@ -1,8 +1,6 @@
-import type { Metadata, ResolvingMetadata } from 'next'
+import type { Metadata } from 'next'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
-import FavButton from '@/app/components/FavButton'
-import Link from 'next/link'
 import ChapterHeader from './ChapterHeader'
 
 type Props = {
@@ -10,10 +8,7 @@ type Props = {
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export async function generateMetadata(
-  { params, searchParams }: Props,
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const id = params.id
   const supabase = createServerComponentClient({ cookies })
   const { data } = await supabase
@@ -32,9 +27,11 @@ export default async function ChapterPage({
   params: { id: string }
 }) {
   const supabase = createServerComponentClient({ cookies })
+
   const {
     data: { session },
   } = await supabase.auth.getSession()
+
   const { data: chapter, error } = await supabase
     .from('chapters')
     .select(
@@ -49,13 +46,6 @@ export default async function ChapterPage({
     .eq('number', id)
     .order('section_order', { foreignTable: 'sections' })
     .single()
-
-  const { data: tags, error: tags_error } = await supabase
-    .from('user_tags')
-    .select(`user_tag_id:id, tag_id, ...tags(tag_text)`)
-    .eq('chapter_id', chapter?.id)
-
-  console.log(tags)
 
   if (error) return <h2>No chapter with id {id}</h2>
 

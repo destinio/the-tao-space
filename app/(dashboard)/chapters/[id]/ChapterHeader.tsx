@@ -1,7 +1,16 @@
 'use client'
 
 import FavButton from '@/app/components/FavButton'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { error } from 'console'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+
+interface Tag {
+  user_tag_id: string
+  tag_id: string
+  tag_text: string
+}
 
 export default function ChapterHeader({
   id,
@@ -16,6 +25,30 @@ export default function ChapterHeader({
   session: boolean
   fav_id: string | null
 }) {
+  const [tags, setTags] = useState<any[]>(null!)
+
+  async function getTags() {
+    const supabase = createClientComponentClient()
+
+    const { data, error: tags_error } = await supabase
+      .from('user_tags')
+      .select(`user_tag_id:id, tag_id, ...tags(tag_text)`)
+      .eq('chapter_id', id)
+
+    if (tags_error) {
+      console.log(tags_error)
+      return []
+    }
+
+    if (!tags_error) {
+      setTags(data)
+    }
+  }
+
+  useEffect(() => {
+    getTags()
+  }, [])
+
   return (
     <>
       <header className='flex flex-col gap-8 border-b-2 py-4 mb-8 border-dotted'>
@@ -24,20 +57,21 @@ export default function ChapterHeader({
             <h3 className=' text-xl'>{String(number).padStart(2, '0')}</h3>
             <h2 className='text-3xl font-bold'>{title}</h2>
           </div>
-          {/* {tags && tags?.length > 0 && (
+          {tags && tags?.length > 0 && (
             <div className='flex gap-2 flex-wrap'>
               {tags?.map(t => {
                 return (
                   <Link
                     className='p-1 rounded-md bg-orange-600'
                     href={`/tags/${t.tag_id}`}
+                    key={t.tag_id}
                   >
                     {t.tag_text}
                   </Link>
                 )
               })}
             </div>
-          )} */}
+          )}
         </div>
         <nav className='flex gap-2 justify-between'>
           {/* PREV */}
