@@ -42,7 +42,7 @@ export default async function UserPage() {
 
         <section className='m-auto max-w-4xl p-8'>
           <h3 className='text-3xl mb-4 flex-wrap'>Tags</h3>
-          <div className='flex gap-2'>
+          <div className='flex gap-2 flex-wrap'>
             {ordered_tags?.map(t => {
               return (
                 <Link
