@@ -43,32 +43,37 @@ export default async function UserPage() {
         <section className='m-auto max-w-4xl p-8'>
           <h3 className='text-3xl mb-4 flex-wrap'>Tags</h3>
           <div className='flex gap-2 flex-wrap'>
-            {ordered_tags?.map(t => {
-              return (
-                <Link
-                  href={`/tags/${t.tag_id}`}
-                  className='p-2 bg-orange-600 rounded-md'
-                >
-                  {t.tag_text}
-                </Link>
-              )
-            })}
+            {ordered_tags
+              ?.sort((a, b) => a.tag_text.localeCompare(b.tag_text))
+              .map(t => {
+                return (
+                  <Link
+                    href={`/tags/${t.tag_id}`}
+                    className='p-2 bg-orange-600 rounded-md'
+                    key={t.tag_text}
+                  >
+                    {t.tag_text}
+                  </Link>
+                )
+              })}
           </div>
         </section>
         <section className='m-auto max-w-4xl p-8'>
           <h3 className='text-3xl mb-4'>favorites</h3>
           <div className='flex flex-wrap gap-2'>
-            {chapters.map(f => {
-              return (
-                <Link
-                  className='text-xl border-b border-dotted'
-                  href={`/chapters/${String(f.number)}`}
-                  key={f.id}
-                >
-                  {String(f.number).padStart(2, '0')}
-                </Link>
-              )
-            })}
+            {chapters
+              .sort((a, b) => a.number - b.number)
+              .map(f => {
+                return (
+                  <Link
+                    className='text-xl border-b border-dotted'
+                    href={`/chapters/${String(f.number)}`}
+                    key={f.id}
+                  >
+                    {String(f.number).padStart(2, '0')}
+                  </Link>
+                )
+              })}
           </div>
         </section>
       </div>
