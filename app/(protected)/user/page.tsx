@@ -57,11 +57,15 @@ export default async function UserPage() {
         </section>
         <section className='m-auto max-w-4xl p-8'>
           <h3 className='text-3xl mb-4'>favorites</h3>
-          <div className='flex flex-col'>
+          <div className='flex flex-wrap gap-2'>
             {chapters.map(f => {
               return (
-                <Link href={`/chapters/${String(f.number)}`} key={f.id}>
-                  {f.title}
+                <Link
+                  className='text-xl border-b border-dotted'
+                  href={`/chapters/${String(f.number)}`}
+                  key={f.id}
+                >
+                  {String(f.number).padStart(2, '0')}
                 </Link>
               )
             })}

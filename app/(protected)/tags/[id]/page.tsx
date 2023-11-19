@@ -28,6 +28,7 @@ export default async function TagByIDPage({
         {tags.map(t => {
           return (
             <Link
+              key={t.tag_text}
               href={`/chapters/${t.chapter_number}`}
               className=' border-b-2 border-dotted text-2xl'
             >
