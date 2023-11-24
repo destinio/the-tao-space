@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import ChapterHeader from './ChapterHeader'
 
 type Props = {
@@ -23,10 +23,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ChapterPage({
   params: { id },
+  searchParams,
 }: {
   params: { id: string }
+  searchParams: { term: string }
 }) {
   const supabase = createServerComponentClient({ cookies })
+
+  console.log(searchParams.term)
 
   const {
     data: { session },
@@ -64,8 +68,17 @@ export default async function ChapterPage({
             <p key={s.id} className=' mb-12 text-2xl'>
               {s.lines.map(l => {
                 return (
-                  <span key={l.id} className='block mb-4'>
-                    {l.text}
+                  <span key={l.id} className='mb-4 flex flex-wrap gap-1'>
+                    {String(l.text)
+                      .split(' ')
+                      .map(word => {
+                        if (word.toLowerCase().includes(searchParams.term)) {
+                          return (
+                            <span className=' text-orange-500'>{word}</span>
+                          )
+                        }
+                        return <span>{word}</span>
+                      })}
                   </span>
                 )
               })}
