@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies, headers } from 'next/headers'
 import ChapterHeader from './ChapterHeader'
+import Link from 'next/link'
 
 type Props = {
   params: { id: string }
@@ -65,10 +66,14 @@ export default async function ChapterPage({
       <div>
         {chapter.sections.map(s => {
           return (
-            <p key={s.id} className=' mb-12 text-2xl'>
+            <p key={s.id} className='mb-6 text-2xl p-2 hover:bg-blue-950'>
               {s.lines.map(l => {
                 return (
-                  <span key={l.id} className='mb-4 flex flex-wrap gap-1'>
+                  <Link
+                    href={`/sections/${s.id}`}
+                    key={l.id}
+                    className='mb-4 flex flex-wrap gap-1'
+                  >
                     {String(l.text)
                       .split(' ')
                       .map(word => {
@@ -79,7 +84,7 @@ export default async function ChapterPage({
                         }
                         return <span>{word}</span>
                       })}
-                  </span>
+                  </Link>
                 )
               })}
             </p>
