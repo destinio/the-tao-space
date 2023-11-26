@@ -8,12 +8,12 @@ export default async function SectionPage({
   params: { id: string }
 }) {
   const supabase = createServerComponentClient({ cookies })
-  const { data: section, error } = await supabase
+  const { data: line, error } = await supabase
     .from('lines')
     .select('*, sections(order:section_order), chapters(*)')
-    .eq('section_id', params.id)
+    .eq('id', params.id)
 
-  if (!section || error) {
+  if (!line || error) {
     console.log(error)
     return <h2>No sections</h2>
   }
@@ -22,21 +22,15 @@ export default async function SectionPage({
     <div>
       <header>
         <nav>
-          <Link href={`/chapters/${section[0].chapters.number}`}>back</Link>
+          <Link href={`/sections/${line[0].section_id}`}>back</Link>
         </nav>
         <h2 className='text-3xl my-4 pb-4 border-b-2 border-dotted'>
-          Chapter {section[0].chapters.number} section{' '}
-          {section[0].sections.order}
+          Chapter {line[0].chapters.number} section {line[0].sections.order}{' '}
+          line {line[0].line_order}
         </h2>
       </header>
       <section className='text-xl'>
-        {section.map(line => {
-          return (
-            <div key={line.id} className='mb-2'>
-              <Link href={`/lines/${line.id}`}>{line.text}</Link>
-            </div>
-          )
-        })}
+        <h3>{line[0].text}</h3>
       </section>
     </div>
   )
