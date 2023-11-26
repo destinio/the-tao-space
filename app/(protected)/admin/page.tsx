@@ -6,8 +6,6 @@ export default async function AdminPage() {
   const supabase = createServerActionClient({ cookies })
   const { data } = await supabase.auth.getUser()
 
-  console.log(data.user)
-
   if (!data || data.user?.email !== 'dleeinc@gmail.com') {
     redirect('/')
   }

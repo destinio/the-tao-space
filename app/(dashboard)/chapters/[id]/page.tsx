@@ -31,8 +31,6 @@ export default async function ChapterPage({
 }) {
   const supabase = createServerComponentClient({ cookies })
 
-  console.log('TERM', searchParams.term)
-
   const {
     data: { session },
   } = await supabase.auth.getSession()
@@ -81,14 +79,20 @@ export default async function ChapterPage({
                           searchParams.term &&
                           word.toLowerCase().includes(searchParams.term)
                         ) {
-                          // console.log(
-                          //   word.toLowerCase().includes(searchParams.term),
-                          // )
                           return (
-                            <span className=' text-orange-500'>{word}</span>
+                            <span
+                              key={`${l.id}:${word}:${l.line_order}`}
+                              className=' text-orange-500'
+                            >
+                              {word}
+                            </span>
                           )
                         }
-                        return <span>{word}</span>
+                        return (
+                          <span key={`${l.id}:${word}:${l.line_order}`}>
+                            {word}
+                          </span>
+                        )
                       })}
                   </Link>
                 )

@@ -26,7 +26,6 @@ export default function page() {
       .textSearch('text', term || searchRef.current.value)
 
     if (data) {
-      console.log(JSON.stringify(data[0]))
       setLines(data)
     }
   }
