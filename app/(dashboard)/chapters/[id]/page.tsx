@@ -31,7 +31,7 @@ export default async function ChapterPage({
 }) {
   const supabase = createServerComponentClient({ cookies })
 
-  console.log(searchParams.term)
+  console.log('TERM', searchParams.term)
 
   const {
     data: { session },
@@ -77,7 +77,13 @@ export default async function ChapterPage({
                     {String(l.text)
                       .split(' ')
                       .map(word => {
-                        if (word.toLowerCase().includes(searchParams.term)) {
+                        if (
+                          searchParams.term &&
+                          word.toLowerCase().includes(searchParams.term)
+                        ) {
+                          // console.log(
+                          //   word.toLowerCase().includes(searchParams.term),
+                          // )
                           return (
                             <span className=' text-orange-500'>{word}</span>
                           )

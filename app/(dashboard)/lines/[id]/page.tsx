@@ -18,6 +18,8 @@ export default async function SectionPage({
     return <h2>No sections</h2>
   }
 
+  console.log(line)
+
   return (
     <div>
       <header>
